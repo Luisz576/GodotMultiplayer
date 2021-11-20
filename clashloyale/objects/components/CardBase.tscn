@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/components/CardBase.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+
+[node name="CardBase" type="Button"]
+margin_right = 195.0
+margin_bottom = 220.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="card_background" type="Sprite" parent="."]
+scale = Vector2( 3.047, 3.437 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="card_name" type="Label" parent="."]
+margin_top = 15.0
+margin_right = 195.0
+margin_bottom = 29.0
+text = "?????"
+align = 1
+uppercase = true
+
+[node name="panel_fume" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 0.431373 )
+self_modulate = Color( 1, 1, 1, 0.478431 )
+scale = Vector2( 3.047, 3.437 )
+texture = ExtResource( 2 )
+centered = false
+[connection signal="button_down" from="." to="." method="_on_CardBase_button_down"]

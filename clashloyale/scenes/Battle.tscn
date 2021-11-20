@@ -1,0 +1,104 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/game_components/GameController.gd" type="Script" id=1]
+[ext_resource path="res://scripts/game_components/HudGame.gd" type="Script" id=2]
+[ext_resource path="res://scripts/game_components/CharactersController.gd" type="Script" id=3]
+[ext_resource path="res://objects/components/Jogador.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 571.359, 65.2518 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 52.7812, 307.704 )
+
+[node name="Battle" type="Node2D"]
+
+[node name="GameComponents" type="Node" parent="."]
+
+[node name="GameController" type="Node" parent="GameComponents"]
+script = ExtResource( 1 )
+hudGame_path = NodePath("../hud_game")
+characterController_path = NodePath("../CharactersController")
+basePositions = [ Vector2( 70, 450 ), Vector2( 950, 450 ) ]
+
+[node name="CharactersController" type="Node" parent="GameComponents"]
+script = ExtResource( 3 )
+charactersNodePath = NodePath("../../World/jogadores")
+charactersSpawnsPosition = [ Vector2( 100, 450 ), Vector2( 800, 450 ) ]
+
+[node name="GameTimer" type="Timer" parent="GameComponents"]
+autostart = true
+
+[node name="hud_game" type="Control" parent="GameComponents"]
+margin_right = 1024.0
+margin_bottom = 600.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="timer" type="Label" parent="GameComponents/hud_game"]
+margin_left = 450.0
+margin_top = 15.0
+margin_right = 480.0
+margin_bottom = 31.0
+rect_scale = Vector2( 4, 4 )
+text = "0:00"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="elixir_player_1" type="Label" parent="GameComponents/hud_game"]
+margin_left = 90.0
+margin_top = 15.0
+margin_right = 127.0
+margin_bottom = 29.0
+rect_scale = Vector2( 4, 4 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="elixir_player_2" type="Label" parent="GameComponents/hud_game"]
+margin_left = 800.0
+margin_top = 15.0
+margin_right = 837.0
+margin_bottom = 29.0
+rect_scale = Vector2( 4, 4 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="map" type="TextureRect" parent="World"]
+margin_left = 0.463255
+margin_right = 1024.46
+margin_bottom = 600.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Jogador1" parent="World" instance=ExtResource( 4 )]
+position = Vector2( 70, 450 )
+
+[node name="Jogador2" parent="World" instance=ExtResource( 4 )]
+position = Vector2( 950, 450 )
+
+[node name="map_barriers" type="StaticBody2D" parent="World"]
+
+[node name="down" type="CollisionShape2D" parent="World/map_barriers"]
+position = Vector2( 505.108, 552.251 )
+shape = SubResource( 1 )
+
+[node name="left" type="CollisionShape2D" parent="World/map_barriers"]
+position = Vector2( -20.2043, 237.962 )
+shape = SubResource( 2 )
+
+[node name="right" type="CollisionShape2D" parent="World/map_barriers"]
+position = Vector2( 1034.91, 246.942 )
+shape = SubResource( 2 )
+
+[node name="jogadores" type="YSort" parent="World"]
+[connection signal="timeout" from="GameComponents/GameTimer" to="GameComponents/GameController" method="_on_GameTimer_timeout"]

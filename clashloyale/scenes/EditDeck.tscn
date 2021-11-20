@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/menu/EditDeck.gd" type="Script" id=1]
+
+[node name="EditDeck" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cards" type="Node2D" parent="."]
+
+[node name="bt_voltar" type="Button" parent="."]
+margin_left = 40.0
+margin_top = 550.0
+margin_right = 195.0
+margin_bottom = 586.0
+text = "Voltar"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="button_down" from="bt_voltar" to="." method="_on_bt_voltar_button_down"]
