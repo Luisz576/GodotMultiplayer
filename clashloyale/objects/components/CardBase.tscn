@@ -18,12 +18,15 @@ texture = ExtResource( 2 )
 centered = false
 
 [node name="card_name" type="Label" parent="."]
+margin_left = 21.0
 margin_top = 15.0
-margin_right = 195.0
+margin_right = 172.0
 margin_bottom = 29.0
 text = "?????"
-align = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="panel_fume" type="Sprite" parent="."]
 modulate = Color( 0, 0, 0, 0.431373 )

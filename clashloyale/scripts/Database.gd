@@ -56,6 +56,18 @@ func getPathsOfDir(folder)->Array:
 		filename = directory.get_next()
 	return paths
 
+func getFilesOfDir(folder)->Array:
+	var files = []
+	var directory = Directory.new()
+	directory.open(folder)
+	directory.list_dir_begin()
+	var filename = directory.get_next()
+	while filename:
+		if not directory.current_is_dir():
+			files.append(filename)
+		filename = directory.get_next()
+	return files
+
 func _setupDefaultVarsIfIsTheFirstTime():
 	#DECK DEFAULT
 	print(getDeck())

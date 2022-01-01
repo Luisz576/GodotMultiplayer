@@ -10,8 +10,9 @@ func _ready():
 	for camp in $properties_camps.get_children():
 		for camp_camp in camp.get_children():
 			if camp_camp is TextEdit:
-				camp_camp.connect("text_changed", self, "_on_something_change")
-	pass
+				camp_camp.connect("text_changed", self, "_on_text_change")
+			if camp_camp is OptionButton:
+				camp_camp.connect("item_selected", self, "_on_dropbutton_change")
 
 #SET_TWO
 func doEqualsSaveAndEditing(cardMeta:CharacterMeta):
@@ -21,16 +22,15 @@ func doEqualsSaveAndEditing(cardMeta:CharacterMeta):
 	var newMetaSave = CharacterMeta.new()
 	newMetaSave.loadFromObject(cardMeta.toObject())
 	cardSaved = Card.new(newMetaSave)
-	pass
 
 #EDIT
 func setEditingCard(cardIndex:int):
+	_buildCamps()
 	cardIndexOnOriginalDeck = cardIndex
 	var cardMeta = Database.getDeck().getCard(cardIndexOnOriginalDeck).getMeta()
 	doEqualsSaveAndEditing(cardMeta)
 	_updateScreen()
 	_resetCamps()
-	pass
 
 func hasChangeSomethingInCard()->bool:
 	var editing = cardEditing.getMeta()
@@ -53,22 +53,27 @@ func hasChangeSomethingInCard()->bool:
 
 func _changeSomeCamp():
 	$bt_save.disabled = !hasChangeSomethingInCard()
-	pass
 
 #CAMPS
 func _getInfoOfCamps():
 	cardEditing.meta.nome = $properties_camps/name_camp/edit_name.text
-	pass
+	if $properties_camps/hair_camp/edit_hair.selected > -1:
+		cardEditing.meta.hair = $properties_camps/hair_camp/edit_hair.selected
 
 func _resetCamps():
 	var saved = cardSaved.getMeta()
 	$properties_camps/name_camp/edit_name.text = saved.nome
+	$properties_camps/hair_camp/edit_hair.select(saved.hair)
 	_changeSomeCamp()
-	pass
 
 func _updateScreen():
-	$CardBase.setCard(cardSaved)
-	pass
+	$CardBase.setCard(cardEditing)
+
+func _buildCamps():
+	for file in Database.getFilesOfDir(Card.HAIR_PATH):
+		if file.ends_with(".png"):
+			file = file.replace(".png", "")
+			$properties_camps/hair_camp/edit_hair.add_item(file)
 
 #SIGNALS
 func _on_bt_voltar_button_down():
@@ -85,9 +90,13 @@ func _on_bt_save_button_down():
 	doEqualsSaveAndEditing(cardEditing.getMeta())
 	_updateScreen()
 	_changeSomeCamp()
-	pass
 
-func _on_something_change():
+func _on_dropbutton_change(_index):
 	_getInfoOfCamps()
+	_updateScreen()
 	_changeSomeCamp()
-	pass
+
+func _on_text_change():
+	_getInfoOfCamps()
+	_updateScreen()
+	_changeSomeCamp()

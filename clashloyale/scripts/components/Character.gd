@@ -7,10 +7,14 @@ var setuped = false
 #PROPERTIES
 var gameController = null
 var meta:CharacterMeta = null
+var cardMeta:Card = null
 var mainTargetPosition = null
 
 func getMeta()->CharacterMeta:
 	return meta
+
+func getCardMeta()->Card:
+	return cardMeta
 
 func getNormalVelocity():
 	if setuped and meta != null:
@@ -26,6 +30,7 @@ var teamId = -1
 func setup(GC, characterMeta:CharacterMeta, tId:int):
 	gameController = GC
 	meta = characterMeta
+	cardMeta = Card.new(characterMeta)
 	teamId = tId
 	mainTargetPosition = gameController.getTargetBasePosition(teamId)
 	setuped = true

@@ -12,6 +12,8 @@ export(NodePath) var hudGame_path
 var hudGame
 export(NodePath) var characterController_path
 var characterController
+export(NodePath) var keyboardController_path
+var keyboardController
 export(Array, Vector2) var basePositions
 
 #GAME VARS
@@ -28,6 +30,7 @@ var teamInfo = []
 
 #PLAYER VARS
 var playerDeck:Deck = null
+var playerDeckCardSelectedIndex = 0
 var playersElixir = []
 
 #READY
@@ -39,8 +42,6 @@ func _ready():
 
 #PROCESS
 func _process(_delta):
-	if Input.is_action_just_pressed("ui_right"):
-		useCard(Card.new(CharacterMeta.new()))
 	match gameState:
 		GameState.GAMEPLAY:
 			hudGame._updateHud()
@@ -86,6 +87,9 @@ func isJogadorOfTeam(jogadorConnectionId, teamId):
 		return teamInfo[teamId]["jogadores"].has(jogadorConnectionId)
 	return false
 
+func getCardSelected():
+	return playerDeck.getCard(playerDeckCardSelectedIndex)
+
 #UPDATES AND FUNCS
 func updateTeamInfo():
 	if get_tree().is_network_server():
@@ -104,19 +108,29 @@ func useCard(card:Card):
 		rpc("_spawnCharacter", card.getMeta().toObject(), Networking.getConnectionId())
 	pass
 
+func selectCard(index:int):
+	playerDeckCardSelectedIndex = index
+
 #GAME FUNCS
 func _setupGame():
 	var listaJogadores = Networking.getJogadores()
 	#HUD
 	hudGame = get_node(hudGame_path)
 	if hudGame == null:
-		rpc("_errorWhileLoadingGame", "Get HUD has faled!")
+		rpc("_errorWhileLoadingGame", "Get HUD has falled!")
+		return false
 	hudGame.setup(self, MAX_PLAYERS)
 	#CharacterController
 	characterController = get_node(characterController_path)
 	if characterController == null:
-		rpc("_errorWhileLoadingGame", "Get CharacterController has faled!")
+		rpc("_errorWhileLoadingGame", "Get CharacterController has falled!")
+		return false
 	characterController.setup(self)
+	keyboardController = get_node(keyboardController_path)
+	if keyboardController == null:
+		rpc("_errorWhileLoadingGame", "Get KeyboardController has falled!")
+		return false
+	keyboardController.setup(self)
 	#DECK
 	playerDeck = Database.getDeck()
 	#SERVER
@@ -222,8 +236,7 @@ remote func _spawnCharacter(characterMetaObj, jogadorId):
 	pass
 
 remotesync func _failedToSpawnCharacter(reason):
-	print("Failed to spawn characer: " + reason)
-	print("TODO: HERE")
-	#TODO: SHOW IN SCREEN TO PLAYER
+	print("Failed to spawn character: " + reason)
+	hudGame.showMessage(reason)
 	pass
 #########

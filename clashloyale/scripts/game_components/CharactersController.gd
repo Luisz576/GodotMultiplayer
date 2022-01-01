@@ -28,7 +28,7 @@ remotesync func _spawnCharacter(characterMetaObj, teamId):
 	#SPAWN
 	var character = CharacterEmpty.instance()
 	character.setup(gameController, cm, teamId)
-	character.name = cm.name + "_" + str(teamId) + "_"
+	character.name = cm.nome + "_" + str(teamId) + "_"
 	charactersNode.call_deferred("add_child", character)
 	character.position = charactersSpawnsPosition[teamId]
 	character.set_network_master(gameController.getJogadorTeamNetworkMaster(teamId))

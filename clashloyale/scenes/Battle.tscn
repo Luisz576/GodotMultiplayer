@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/game_components/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/game_components/HudGame.gd" type="Script" id=2]
 [ext_resource path="res://scripts/game_components/CharactersController.gd" type="Script" id=3]
 [ext_resource path="res://objects/components/Jogador.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scripts/game_components/KeyboardController.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 571.359, 65.2518 )
@@ -15,10 +16,14 @@ extents = Vector2( 52.7812, 307.704 )
 
 [node name="GameComponents" type="Node" parent="."]
 
+[node name="KeyboardController" type="Node" parent="GameComponents"]
+script = ExtResource( 5 )
+
 [node name="GameController" type="Node" parent="GameComponents"]
 script = ExtResource( 1 )
 hudGame_path = NodePath("../hud_game")
 characterController_path = NodePath("../CharactersController")
+keyboardController_path = NodePath("../KeyboardController")
 basePositions = [ Vector2( 70, 450 ), Vector2( 950, 450 ) ]
 
 [node name="CharactersController" type="Node" parent="GameComponents"]
@@ -33,6 +38,19 @@ autostart = true
 margin_right = 1024.0
 margin_bottom = 600.0
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="error_message" type="Label" parent="GameComponents/hud_game"]
+visible = false
+margin_left = 308.728
+margin_top = 82.2182
+margin_right = 504.728
+margin_bottom = 106.218
+rect_scale = Vector2( 2, 2 )
+custom_colors/font_color = Color( 0.909804, 0.0156863, 0.0156863, 1 )
+text = "You haven't money to do that!"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -73,6 +91,7 @@ __meta__ = {
 [node name="World" type="Node2D" parent="."]
 
 [node name="map" type="TextureRect" parent="World"]
+visible = false
 margin_left = 0.463255
 margin_right = 1024.46
 margin_bottom = 600.0
@@ -102,3 +121,4 @@ shape = SubResource( 2 )
 
 [node name="jogadores" type="YSort" parent="World"]
 [connection signal="timeout" from="GameComponents/GameTimer" to="GameComponents/GameController" method="_on_GameTimer_timeout"]
+[connection signal="timeout" from="GameComponents/GameTimer" to="GameComponents/hud_game" method="_on_GameTimer_timeout"]

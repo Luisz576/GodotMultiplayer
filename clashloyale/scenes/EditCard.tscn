@@ -6,6 +6,8 @@
 [node name="EditCard" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.5874
+margin_right = 1.5874
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -58,6 +60,32 @@ margin_left = 361.502
 margin_top = 40.3307
 margin_right = 631.502
 margin_bottom = 74.3307
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hair_camp" type="Control" parent="properties_camps"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hair" type="Label" parent="properties_camps/hair_camp"]
+margin_left = 265.544
+margin_top = 91.5663
+margin_right = 312.544
+margin_bottom = 105.566
+rect_scale = Vector2( 2, 2 )
+text = "Cabelo:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="edit_hair" type="OptionButton" parent="properties_camps/hair_camp"]
+margin_left = 367.0
+margin_top = 87.0
+margin_right = 632.0
+margin_bottom = 121.0
+text = "Selecione um cabelo"
 __meta__ = {
 "_edit_use_anchors_": false
 }
